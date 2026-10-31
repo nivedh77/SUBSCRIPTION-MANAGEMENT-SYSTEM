@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Management System | Odoo 19 Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #714B67;
+            --primary-dark: #53334c;
+            --primary-light: #986b8c;
+            --accent: #00A09D;
+            --accent-glow: rgba(0, 160, 157, 0.25);
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(113, 75, 103, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 85% 25%, rgba(0, 160, 157, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(113, 75, 103, 0.2) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid var(--bg-card-border);
+            padding: 16px 32px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #0f172a;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-github:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+            text-align: center;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(113, 75, 103, 0.25);
+            border: 1px solid rgba(113, 75, 103, 0.5);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            color: #d8b4e2;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 70%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            color: var(--text-muted);
+            max-width: 760px;
+            margin: 0 auto 36px;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px -5px rgba(113, 75, 103, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(113, 75, 103, 0.7);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--bg-card-border);
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: rgba(113, 75, 103, 0.3);
+            border: 1px solid rgba(113, 75, 103, 0.5);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #38bdf8;
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        footer {
+            border-top: 1px solid var(--bg-card-border);
+            padding: 40px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo-area">
+                <span class="logo-badge">ODOO 19</span>
+                <span>Subscription Management</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#install">Installation</a>
+                <a href="https://github.com/nivedh77/SUBSCRIPTION-MANAGEMENT-SYSTEM" target="_blank" class="btn-github">
+                    <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                    </svg>
+                    GitHub Repo
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-pill">
+                🚀 Odoo Makeathon 2026 Project &bull; Team STRANGERS
+            </div>
+            <h1>Native Subscription &amp; Recurring Billing for Odoo 19</h1>
+            <p>
+                An enterprise-ready, fully native Odoo 19 Community module. Complete recurring billing cycles, automated customer invoicing via <code>account.move</code>, promotional discounts, real-time KPI analytics, and a self-service customer portal.
+            </p>
+            <div class="hero-cta">
+                <a href="https://github.com/nivedh77/SUBSCRIPTION-MANAGEMENT-SYSTEM" target="_blank" class="btn-primary">View on GitHub</a>
+                <a href="#features" class="btn-outline">Explore Features</a>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2>Comprehensive Feature Suite</h2>
+                <p>Designed natively for Odoo 19 Community with clean ORM architecture and strict validation.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Flexible Subscription Plans</h3>
+                    <p>Configure Daily, Weekly, Monthly, and Yearly intervals with trial periods, base pricing, minimum quantity constraints, and auto-renewal toggling.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🧾</div>
+                    <h3>Automated Recurring Invoicing</h3>
+                    <p>Integrates directly with Odoo <code>account.move</code>. Automated daily billing cron, period duplicate protection, and accurate tax computation.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🏷️</div>
+                    <h3>Promotional Discounts</h3>
+                    <p>Support for percentage and fixed discount coupons with minimum spend thresholds and validity date windows applied to invoice totals.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💳</div>
+                    <h3>Accounting Payments &amp; Due Tracking</h3>
+                    <p>Real-time synchronization with actual posted invoices: tracking total paid, outstanding due, and overdue receivables with payment status badges.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>Real Database KPI Dashboard</h3>
+                    <p>Zero fake or mock statistics. Direct PostgreSQL queries for total subscribers, active contracts, churned accounts, and received revenue.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Customer Self-Service Portal</h3>
+                    <p>Responsive portal interface at <code>/my/subscriptions</code> allowing customers to view contracts, download invoices, and request cancellations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="install" class="features-section">
+            <div class="section-header">
+                <h2>Quick Installation</h2>
+                <p>Clone directly into your Odoo 19 custom addons directory.</p>
+            </div>
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <p style="margin-bottom: 12px; font-weight: 600; color: #f8fafc;">1. Clone the repository:</p>
+                <div class="code-block">git clone https://github.com/nivedh77/SUBSCRIPTION-MANAGEMENT-SYSTEM.git</div>
+                <p style="margin-top: 20px; margin-bottom: 12px; font-weight: 600; color: #f8fafc;">2. Add to your <code>odoo.conf</code> addons_path and update apps:</p>
+                <div class="code-block">addons_path = /path/to/odoo/addons,/path/to/SUBSCRIPTION-MANAGEMENT-SYSTEM</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Built by <strong>Team STRANGERS</strong>: <a href="https://github.com/nivedh77" target="_blank">Nivedh M</a> &amp; <a href="https://github.com/rashmikrishnap" target="_blank">Rashmi Krishna P</a>
+        </p>
+        <p style="margin-top: 8px;">
+            Odoo Makeathon 2026 &bull; Licensed under LGPL-3
+        </p>
+    </footer>
+
+</body>
+</html>
