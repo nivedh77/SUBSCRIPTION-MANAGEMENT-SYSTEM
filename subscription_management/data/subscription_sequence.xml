@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Subscription Contract Sequence -->
+    <record id="seq_subscription_contract" model="ir.sequence">
+        <field name="name">Subscription Reference</field>
+        <field name="code">subscription.subscription</field>
+        <field name="prefix">SUB/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

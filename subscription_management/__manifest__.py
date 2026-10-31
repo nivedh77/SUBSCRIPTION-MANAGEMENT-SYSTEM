@@ -9,23 +9,24 @@
     'description': """
 Subscription Management System
 ==============================
-A native Odoo 19 Community module built for the Odoo Makeathon 2026.
+A native Odoo 19 Community module built for the Odoo Makeathon / Hackathon 2026.
 
 Features:
 ---------
 * Subscription Plan Management (Daily, Weekly, Monthly, Yearly intervals)
 * Role-based access control (Admin, Staff, Customer/Portal)
 * Contract quotations, activations, pause, renewal, and cancellation
-* Automated recurring invoice generation and tax calculation
-* Discount management (fixed and percentage)
-* Customer self-service portal
-* Revenue analytics (MRR, ARR, active subscriber stats)
+* Automated recurring invoice generation via daily cron
+* Real-time MRR and ARR revenue analytics with Pivot & Graph views
+* Customer self-service portal (/my/subscriptions) with cancellation requests
+* Churn and cancellation tracking reasons
     """,
-    'author': 'Nivedh M',
+    'author': 'Team STRANGERS (Nivedh M, Rashmi Krishna P)',
     'website': 'https://github.com/nivedh77/SUBSCRIPTION-MANAGEMENT-SYSTEM',
     'license': 'LGPL-3',
     'depends': [
         'base',
+        'mail',
         'product',
         'account',
         'portal',
@@ -33,8 +34,15 @@ Features:
     'data': [
         'security/subscription_security.xml',
         'security/ir.model.access.csv',
+        'data/subscription_sequence.xml',
+        'data/subscription_cron.xml',
+        'data/subscription_close_reason_data.xml',
         'data/subscription_plan_data.xml',
+        'views/subscription_views.xml',
         'views/subscription_plan_views.xml',
+        'views/subscription_close_reason_views.xml',
+        'views/subscription_product_views.xml',
+        'views/portal_subscription_templates.xml',
         'views/subscription_menus.xml',
     ],
     'application': True,

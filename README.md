@@ -43,11 +43,22 @@ A robust, enterprise-ready Subscription Management module designed natively for 
 └── subscription_management/
     ├── __init__.py
     ├── __manifest__.py
+    ├── controllers/
+    │   ├── __init__.py
+    │   └── portal.py
     ├── data/
-    │   └── subscription_plan_data.xml
+    │   ├── subscription_close_reason_data.xml
+    │   ├── subscription_cron.xml
+    │   ├── subscription_plan_data.xml
+    │   └── subscription_sequence.xml
     ├── models/
     │   ├── __init__.py
-    │   └── subscription_plan.py
+    │   ├── account_move.py
+    │   ├── product_template.py
+    │   ├── subscription_close_reason.py
+    │   ├── subscription_line.py
+    │   ├── subscription_plan.py
+    │   └── subscription_subscription.py
     ├── security/
     │   ├── ir.model.access.csv
     │   └── subscription_security.xml
@@ -56,8 +67,12 @@ A robust, enterprise-ready Subscription Management module designed natively for 
     │       ├── icon.png
     │       └── index.html
     └── views/
+        ├── portal_subscription_templates.xml
+        ├── subscription_close_reason_views.xml
         ├── subscription_menus.xml
-        └── subscription_plan_views.xml
+        ├── subscription_plan_views.xml
+        ├── subscription_product_views.xml
+        └── subscription_views.xml
 ```
 
 ---

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Close Reason List View -->
+    <record id="view_subscription_close_reason_list" model="ir.ui.view">
+        <field name="name">subscription.close.reason.list</field>
+        <field name="model">subscription.close.reason</field>
+        <field name="arch" type="xml">
+            <list string="Close Reasons" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Close Reason Action -->
+    <record id="action_subscription_close_reason" model="ir.actions.act_window">
+        <field name="name">Close Reasons</field>
+        <field name="res_model">subscription.close.reason</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define Subscription Cancellation / Close Reasons
+            </p>
+            <p>
+                Track reasons why customers cancel or churn to optimize your pricing, features, and retention strategies.
+            </p>
+        </field>
+    </record>
+</odoo>
