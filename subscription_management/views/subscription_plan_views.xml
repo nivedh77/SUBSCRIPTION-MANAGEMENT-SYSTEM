@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Subscription Plan List View -->
+    <record id="view_subscription_plan_list" model="ir.ui.view">
+        <field name="name">subscription.plan.list</field>
+        <field name="model">subscription.plan</field>
+        <field name="arch" type="xml">
+            <list string="Subscription Plans">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="billing_interval"/>
+                <field name="billing_interval_count"/>
+                <field name="trial_period_days"/>
+                <field name="auto_renew" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Subscription Plan Form View -->
+    <record id="view_subscription_plan_form" model="ir.ui.view">
+        <field name="name">subscription.plan.form</field>
+        <field name="model">subscription.plan</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Plan">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" string="Plan Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Monthly Standard"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="billing_details" string="Billing Rules">
+                            <field name="code" placeholder="e.g. PLAN-M-STD"/>
+                            <field name="billing_interval"/>
+                            <label for="billing_interval_count" string="Repeat Every"/>
+                            <div class="o_row">
+                                <field name="billing_interval_count"/>
+                                <span>interval(s)</span>
+                            </div>
+                            <field name="auto_renew"/>
+                        </group>
+                        <group name="trial_company" string="Trial &amp; Company">
+                            <label for="trial_period_days" string="Trial Period"/>
+                            <div class="o_row">
+                                <field name="trial_period_days"/>
+                                <span>day(s)</span>
+                            </div>
+                            <field name="active" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Terms &amp; Description">
+                            <field name="description" placeholder="Specify terms, features included, and conditions..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Subscription Plan Search View -->
+    <record id="view_subscription_plan_search" model="ir.ui.view">
+        <field name="name">subscription.plan.search</field>
+        <field name="model">subscription.plan</field>
+        <field name="arch" type="xml">
+            <search string="Search Subscription Plans">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Billing Frequency" name="group_interval" context="{'group_by': 'billing_interval'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_subscription_plan" model="ir.actions.act_window">
+        <field name="name">Subscription Plans</field>
+        <field name="res_model">subscription.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subscription_plan_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Subscription Plan!
+            </p>
+            <p>
+                Define recurring billing intervals (daily, weekly, monthly, yearly), trial days, and renewal rules.
+            </p>
+        </field>
+    </record>
+</odoo>

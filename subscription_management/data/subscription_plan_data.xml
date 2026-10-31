@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default Monthly Standard Plan -->
+    <record id="plan_monthly_standard" model="subscription.plan">
+        <field name="name">Monthly Standard</field>
+        <field name="code">PLAN-M-STD</field>
+        <field name="billing_interval">monthly</field>
+        <field name="billing_interval_count">1</field>
+        <field name="trial_period_days">0</field>
+        <field name="auto_renew">True</field>
+        <field name="description"><![CDATA[<p>Standard monthly subscription billing cycle with automatic renewal.</p>]]></field>
+    </record>
+
+    <!-- Default Yearly Pro Plan -->
+    <record id="plan_yearly_pro" model="subscription.plan">
+        <field name="name">Yearly Professional</field>
+        <field name="code">PLAN-Y-PRO</field>
+        <field name="billing_interval">yearly</field>
+        <field name="billing_interval_count">1</field>
+        <field name="trial_period_days">0</field>
+        <field name="auto_renew">True</field>
+        <field name="description"><![CDATA[<p>Annual subscription billing cycle with automatic renewal and discounted rate.</p>]]></field>
+    </record>
+
+    <!-- Default Weekly Trial Plan -->
+    <record id="plan_weekly_trial" model="subscription.plan">
+        <field name="name">Weekly Trial</field>
+        <field name="code">PLAN-W-TRL</field>
+        <field name="billing_interval">weekly</field>
+        <field name="billing_interval_count">1</field>
+        <field name="trial_period_days">7</field>
+        <field name="auto_renew">True</field>
+        <field name="description"><![CDATA[<p>Weekly recurring subscription featuring a 7-day introductory trial period.</p>]]></field>
+    </record>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Module Category -->
+    <record id="module_category_subscription" model="ir.module.category">
+        <field name="name">Subscriptions</field>
+        <field name="description">Manage subscription plans, contracts, billing, and customer portal.</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <!-- User / Staff Group -->
+    <record id="group_subscription_user" model="res.groups">
+        <field name="name">User (Staff)</field>
+        <field name="category_id" ref="module_category_subscription"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Staff members who create and manage subscription orders and customer contracts.</field>
+    </record>
+
+    <!-- Administrator Group -->
+    <record id="group_subscription_manager" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="module_category_subscription"/>
+        <field name="implied_ids" eval="[(4, ref('group_subscription_user'))]"/>
+        <field name="comment">Full administrative access to subscription plans, contracts, billing settings, and revenue analytics.</field>
+    </record>
+</odoo>
