@@ -13,10 +13,13 @@ A native Odoo 19 Community module built for the Odoo Makeathon / Hackathon 2026.
 
 Features:
 ---------
-* Subscription Plan Management (Daily, Weekly, Monthly, Yearly intervals)
+* Subscription Plan Management (Daily, Weekly, Monthly, Yearly intervals with price and volume rules)
 * Role-based access control (Admin, Staff, Customer/Portal)
 * Contract quotations, activations, pause, renewal, and cancellation
-* Automated recurring invoice generation via daily cron
+* Automated recurring invoice generation via daily cron with duplicate protection
+* Promotional discount vouchers (percentage and fixed amounts with validity rules)
+* Accounting payments tracking with live paid, outstanding, and overdue figures
+* Live database KPI analytics dashboard
 * Real-time MRR and ARR revenue analytics with Pivot & Graph views
 * Customer self-service portal (/my/subscriptions) with cancellation requests
 * Churn and cancellation tracking reasons
@@ -38,8 +41,11 @@ Features:
         'data/subscription_cron.xml',
         'data/subscription_close_reason_data.xml',
         'data/subscription_plan_data.xml',
+        'data/subscription_discount_data.xml',
+        'views/subscription_dashboard_views.xml',
         'views/subscription_views.xml',
         'views/subscription_plan_views.xml',
+        'views/subscription_discount_views.xml',
         'views/subscription_close_reason_views.xml',
         'views/subscription_product_views.xml',
         'views/portal_subscription_templates.xml',

@@ -5,7 +5,12 @@
         <field name="name">subscription.subscription.list</field>
         <field name="model">subscription.subscription</field>
         <field name="arch" type="xml">
-            <list string="Subscriptions" sample="1" decoration-info="state == 'draft'" decoration-success="state == 'in_progress'" decoration-warning="state == 'paused'" decoration-muted="state in ('closed', 'cancel')">
+            <list string="Subscriptions" sample="1"
+                  decoration-info="state in ('draft', 'quotation')"
+                  decoration-primary="state == 'confirmed'"
+                  decoration-success="state == 'in_progress'"
+                  decoration-warning="state == 'paused'"
+                  decoration-muted="state in ('closed', 'cancel')">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="plan_id"/>
@@ -13,10 +18,67 @@
                 <field name="next_billing_date"/>
                 <field name="currency_id" column_invisible="True"/>
                 <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-warning="payment_status == 'pending'"
+                       decoration-danger="payment_status == 'overdue'"
+                       decoration-info="payment_status == 'partial'"
+                       decoration-muted="payment_status == 'no_invoices'"/>
                 <field name="mrr" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'in_progress'" decoration-warning="state == 'paused'" decoration-danger="state in ('closed', 'cancel')"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft', 'quotation')"
+                       decoration-primary="state == 'confirmed'"
+                       decoration-success="state == 'in_progress'"
+                       decoration-warning="state == 'paused'"
+                       decoration-danger="state in ('closed', 'cancel')"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
             </list>
+        </field>
+    </record>
+
+    <!-- Subscription Kanban View -->
+    <record id="view_subscription_subscription_kanban" model="ir.ui.view">
+        <field name="name">subscription.subscription.kanban</field>
+        <field name="model">subscription.subscription</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" sample="1">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="amount_total"/>
+                <field name="currency_id"/>
+                <field name="next_billing_date"/>
+                <field name="payment_status"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong class="o_kanban_record_title fs-6"><field name="name"/></strong>
+                            <field name="state" widget="label_selection"
+                                   options="{'classes': {'draft': 'default', 'quotation': 'info', 'confirmed': 'primary', 'in_progress': 'success', 'paused': 'warning', 'closed': 'dark', 'cancel': 'danger'}}"/>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            <i class="fa fa-user me-1"/> <field name="partner_id"/>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-light text-dark border"><field name="plan_id"/></span>
+                            </div>
+                            <div class="fw-bold">
+                                <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </div>
+                        </div>
+                        <div class="text-muted small mt-2 d-flex justify-content-between">
+                            <span>Next: <field name="next_billing_date"/></span>
+                            <field name="payment_status" widget="badge"
+                                   decoration-success="payment_status == 'paid'"
+                                   decoration-warning="payment_status == 'pending'"
+                                   decoration-danger="payment_status == 'overdue'"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -27,14 +89,25 @@
         <field name="arch" type="xml">
             <form string="Subscription">
                 <header>
-                    <button name="action_confirm" string="Confirm / Activate" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_create_invoice" string="Generate Invoice" type="object" class="btn-primary" invisible="state != 'in_progress'"/>
-                    <button name="action_pause" string="Pause Subscription" type="object" invisible="state != 'in_progress'"/>
-                    <button name="action_resume" string="Resume Subscription" type="object" class="btn-success" invisible="state != 'paused'"/>
-                    <button name="action_close" string="Close / Churn" type="object" invisible="state not in ('in_progress', 'paused')"/>
-                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('closed', 'cancel')"/>
-                    <button name="action_draft" string="Reset to Draft" type="object" invisible="state not in ('closed', 'cancel')"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,paused,closed"/>
+                    <button name="action_quotation" string="Send Quotation" type="object"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="Confirm Quotation" type="object" class="btn-primary"
+                            invisible="state not in ('draft', 'quotation')"/>
+                    <button name="action_activate" string="Activate Subscription" type="object" class="btn-success"
+                            invisible="state not in ('confirmed', 'draft')"/>
+                    <button name="action_create_invoice" string="Generate Invoice" type="object" class="btn-primary"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_pause" string="Pause Subscription" type="object"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_resume" string="Resume Subscription" type="object" class="btn-success"
+                            invisible="state != 'paused'"/>
+                    <button name="action_close" string="Close / Churn" type="object"
+                            invisible="state not in ('in_progress', 'paused')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('closed', 'cancel')"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('closed', 'cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,paused,closed"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -65,6 +138,12 @@
                             <field name="date_start"/>
                             <field name="next_billing_date"/>
                             <field name="date_end"/>
+                            <field name="payment_status" widget="badge"
+                                   decoration-success="payment_status == 'paid'"
+                                   decoration-warning="payment_status == 'pending'"
+                                   decoration-danger="payment_status == 'overdue'"
+                                   decoration-info="payment_status == 'partial'"
+                                   decoration-muted="payment_status == 'no_invoices'"/>
                             <field name="currency_id" groups="base.group_multi_currency"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
@@ -86,9 +165,15 @@
                                 </list>
                             </field>
                             <group col="6" class="mt-2 mt-md-0">
-                                <group colspan="4"/>
+                                <group colspan="4">
+                                    <group string="Promotional Discount">
+                                        <field name="discount_id" placeholder="Select applicable discount coupon..."/>
+                                    </group>
+                                </group>
                                 <group class="oe_subtotal_footer oe_right" colspan="2" name="subscription_total">
                                     <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"
+                                           invisible="discount_amount == 0"/>
                                     <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <div class="oe_subtotal_footer_separator oe_inline o_td_label">
                                         <label for="amount_total"/>
@@ -101,6 +186,33 @@
                                     <field name="arr" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
                             </group>
+                        </page>
+
+                        <page name="financial_summary" string="Invoicing &amp; Payments">
+                            <group>
+                                <group string="Actual Accounting Statistics">
+                                    <field name="amount_paid" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_due" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_overdue" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                            <field name="invoice_ids" readonly="1">
+                                <list string="Generated Invoices">
+                                    <field name="name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="invoice_date_due"/>
+                                    <field name="subscription_billing_date"/>
+                                    <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="payment_state" widget="badge"
+                                           decoration-success="payment_state == 'paid'"
+                                           decoration-warning="payment_state in ('partial', 'in_payment')"
+                                           decoration-danger="payment_state == 'not_paid'"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'posted'"/>
+                                </list>
+                            </field>
                         </page>
 
                         <page name="other_info" string="Terms &amp; Cancellation">
@@ -137,11 +249,16 @@
                 <separator/>
                 <filter string="My Subscriptions" name="my_subscriptions" domain="[('user_id', '=', uid)]"/>
                 <separator/>
-                <filter string="Draft Quotations" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Active" name="active" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Draft Quotations" name="draft" domain="[('state', 'in', ('draft', 'quotation'))]"/>
+                <filter string="Active" name="active" domain="[('state', 'in', ('in_progress', 'confirmed'))]"/>
                 <filter string="Paused" name="paused" domain="[('state', '=', 'paused')]"/>
                 <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
                 <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <filter string="Needs Billing Today" name="filter_billing_due"
+                        domain="[('state', '=', 'in_progress'), ('next_billing_date', '&lt;=', context_today)]"/>
+                <filter string="Overdue Invoices" name="filter_overdue"
+                        domain="[('payment_status', '=', 'overdue')]"/>
                 <group expand="0" string="Group By">
                     <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
                     <filter string="Subscription Plan" name="group_plan" context="{'group_by': 'plan_id'}"/>
@@ -184,7 +301,7 @@
     <record id="action_subscription_orders" model="ir.actions.act_window">
         <field name="name">Subscriptions</field>
         <field name="res_model">subscription.subscription</field>
-        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
         <field name="search_view_id" ref="view_subscription_subscription_search"/>
         <field name="context">{'search_default_active': 1}</field>
         <field name="help" type="html">
@@ -201,7 +318,7 @@
     <record id="action_subscription_quotations" model="ir.actions.act_window">
         <field name="name">Quotations</field>
         <field name="res_model">subscription.subscription</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="search_view_id" ref="view_subscription_subscription_search"/>
         <field name="context">{'search_default_draft': 1}</field>
         <field name="help" type="html">
@@ -229,5 +346,14 @@
                 As subscriptions become active, your Monthly Recurring Revenue (MRR) and Annual Recurring Revenue (ARR) will be analyzed here.
             </p>
         </field>
+    </record>
+
+    <!-- Window Action: Subscription Invoices -->
+    <record id="action_subscription_invoices" model="ir.actions.act_window">
+        <field name="name">Subscription Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('subscription_id', '!=', False)]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
     </record>
 </odoo>

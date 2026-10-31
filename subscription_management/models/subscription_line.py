@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class SubscriptionLine(models.Model):
@@ -63,7 +64,11 @@ class SubscriptionLine(models.Model):
             return
         company = self.company_id or self.env.company
         self.name = self.product_id.display_name
-        self.price_unit = self.product_id.list_price
+        # If subscription plan price is defined and greater than 0, default to plan price
+        if self.subscription_id and self.subscription_id.plan_id and self.subscription_id.plan_id.price > 0:
+            self.price_unit = self.subscription_id.plan_id.price
+        else:
+            self.price_unit = self.product_id.list_price
         taxes = self.product_id.taxes_id.filtered(lambda t: t.company_id == company)
         self.tax_ids = [(6, 0, taxes.ids)]
 
@@ -87,3 +92,28 @@ class SubscriptionLine(models.Model):
                 line.price_subtotal = subtotal
                 line.price_tax = 0.0
                 line.price_total = subtotal
+
+    @api.constrains('quantity')
+    def _check_quantity(self):
+        for line in self:
+            if line.quantity <= 0:
+                raise ValidationError(_('Line quantity must be strictly greater than 0.'))
+            if line.subscription_id and line.subscription_id.plan_id:
+                min_qty = line.subscription_id.plan_id.min_quantity
+                if min_qty > 0 and line.quantity < min_qty:
+                    raise ValidationError(_('Quantity (%(qty)s) is less than the plan minimum required volume (%(min_qty)s).') % {
+                        'qty': line.quantity,
+                        'min_qty': min_qty
+                    })
+
+    @api.constrains('price_unit')
+    def _check_price_unit(self):
+        for line in self:
+            if line.price_unit < 0:
+                raise ValidationError(_('Unit price cannot be negative.'))
+
+    @api.constrains('discount')
+    def _check_discount(self):
+        for line in self:
+            if line.discount < 0 or line.discount > 100:
+                raise ValidationError(_('Line discount percentage must be between 0 and 100.'))

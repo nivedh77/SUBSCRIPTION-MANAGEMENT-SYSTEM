@@ -10,8 +10,11 @@
                 <field name="code"/>
                 <field name="billing_interval"/>
                 <field name="billing_interval_count"/>
+                <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="min_quantity"/>
                 <field name="trial_period_days"/>
                 <field name="auto_renew" widget="boolean_toggle"/>
+                <field name="currency_id" column_invisible="True"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
@@ -25,6 +28,12 @@
             <form string="Subscription Plan">
                 <sheet>
                     <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-repeat" type="object"
+                                name="action_view_subscriptions">
+                            <field name="subscription_count" widget="statinfo" string="Subscriptions"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <label for="name" string="Plan Name"/>
                         <h1>
@@ -32,7 +41,7 @@
                         </h1>
                     </div>
                     <group>
-                        <group name="billing_details" string="Billing Rules">
+                        <group name="pricing_details" string="Pricing &amp; Interval">
                             <field name="code" placeholder="e.g. PLAN-M-STD"/>
                             <field name="billing_interval"/>
                             <label for="billing_interval_count" string="Repeat Every"/>
@@ -40,6 +49,8 @@
                                 <field name="billing_interval_count"/>
                                 <span>interval(s)</span>
                             </div>
+                            <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="min_quantity"/>
                             <field name="auto_renew"/>
                         </group>
                         <group name="trial_company" string="Trial &amp; Company">
@@ -49,6 +60,7 @@
                                 <span>day(s)</span>
                             </div>
                             <field name="active" invisible="1"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
@@ -89,7 +101,7 @@
                 Create your first Subscription Plan!
             </p>
             <p>
-                Define recurring billing intervals (daily, weekly, monthly, yearly), trial days, and renewal rules.
+                Define recurring billing intervals (daily, weekly, monthly, yearly), pricing, trial days, and renewal rules.
             </p>
         </field>
     </record>

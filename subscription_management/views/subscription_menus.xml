@@ -7,6 +7,13 @@
               groups="group_subscription_user"
               sequence="20"/>
 
+    <!-- Dashboard / Live Analytics -->
+    <menuitem id="menu_subscription_dashboard"
+              name="Dashboard"
+              parent="menu_subscription_root"
+              action="action_subscription_dashboard"
+              sequence="5"/>
+
     <!-- Operations Section -->
     <menuitem id="menu_subscription_operations"
               name="Subscriptions"
@@ -26,6 +33,19 @@
               parent="menu_subscription_operations"
               action="action_subscription_quotations"
               sequence="20"/>
+
+    <!-- Invoicing Section -->
+    <menuitem id="menu_subscription_invoicing"
+              name="Invoicing"
+              parent="menu_subscription_root"
+              sequence="20"/>
+
+    <!-- Invoicing -> Subscription Invoices -->
+    <menuitem id="menu_subscription_invoices"
+              name="Subscription Invoices"
+              parent="menu_subscription_invoicing"
+              action="action_subscription_invoices"
+              sequence="10"/>
 
     <!-- Reporting Section -->
     <menuitem id="menu_subscription_reporting_root"
@@ -54,6 +74,13 @@
               parent="menu_subscription_config"
               action="action_subscription_plan"
               sequence="10"/>
+
+    <!-- Configuration -> Discounts & Coupons -->
+    <menuitem id="menu_subscription_discount"
+              name="Discounts &amp; Coupons"
+              parent="menu_subscription_config"
+              action="action_subscription_discount"
+              sequence="15"/>
 
     <!-- Configuration -> Close Reasons -->
     <menuitem id="menu_subscription_close_reason"

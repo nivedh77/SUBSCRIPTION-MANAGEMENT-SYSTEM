@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Subscription Dashboard Form View -->
+    <record id="view_subscription_dashboard_form" model="ir.ui.view">
+        <field name="name">subscription.dashboard.form</field>
+        <field name="model">subscription.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Analytics &amp; KPI Dashboard" create="0" delete="0">
+                <header>
+                    <button name="action_open_dashboard" string="Refresh Metrics" type="object" icon="fa-refresh" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title mb-4">
+                        <h1 class="text-primary">
+                            <i class="fa fa-tachometer me-2"/>Subscription Live Analytics &amp; KPIs
+                        </h1>
+                        <p class="text-muted">
+                            Real-time database statistics computed directly from subscriber contracts and linked accounting invoices.
+                        </p>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Card 1: Total Subscriptions -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Total Subscriptions</span>
+                                        <h2 class="mb-0 fw-bold text-dark"><field name="total_subscriptions" readonly="1"/></h2>
+                                    </div>
+                                    <div class="bg-primary text-white p-3 rounded-circle">
+                                        <i class="fa fa-folder-open fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_all_subscriptions" type="object"
+                                            string="View All Subscriptions" class="btn btn-outline-primary btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Active Subscriptions -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Active Subscribers</span>
+                                        <h2 class="mb-0 fw-bold text-success"><field name="active_subscriptions" readonly="1"/></h2>
+                                    </div>
+                                    <div class="bg-success text-white p-3 rounded-circle">
+                                        <i class="fa fa-check-circle fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_active_subscriptions" type="object"
+                                            string="View Active Subscriptions" class="btn btn-outline-success btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Closed Subscriptions -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Closed Subscriptions</span>
+                                        <h2 class="mb-0 fw-bold text-secondary"><field name="closed_subscriptions" readonly="1"/></h2>
+                                    </div>
+                                    <div class="bg-secondary text-white p-3 rounded-circle">
+                                        <i class="fa fa-times-circle fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_closed_subscriptions" type="object"
+                                            string="View Closed Subscriptions" class="btn btn-outline-secondary btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Card 4: Revenue Received -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Revenue Received</span>
+                                        <h2 class="mb-0 fw-bold text-success">
+                                            <field name="revenue_received" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                        </h2>
+                                    </div>
+                                    <div class="bg-success text-white p-3 rounded-circle">
+                                        <i class="fa fa-money fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_revenue_invoices" type="object"
+                                            string="View Paid Invoices" class="btn btn-outline-success btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Outstanding Invoices -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Outstanding Invoices</span>
+                                        <h2 class="mb-0 fw-bold text-warning">
+                                            <field name="outstanding_invoices_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                        </h2>
+                                    </div>
+                                    <div class="bg-warning text-white p-3 rounded-circle">
+                                        <i class="fa fa-clock-o fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_outstanding_invoices" type="object"
+                                            string="View Outstanding Invoices" class="btn btn-outline-warning btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 6: Overdue Invoices -->
+                        <div class="col-12 col-md-4">
+                            <div class="card shadow-sm border-0 bg-light p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted text-uppercase fw-semibold small">Overdue Invoices</span>
+                                        <h2 class="mb-0 fw-bold text-danger">
+                                            <field name="overdue_invoices_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                        </h2>
+                                    </div>
+                                    <div class="bg-danger text-white p-3 rounded-circle">
+                                        <i class="fa fa-exclamation-triangle fa-2x"/>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button name="action_view_overdue_invoices" type="object"
+                                            string="View Overdue Invoices" class="btn btn-outline-danger btn-sm w-100"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <group string="Operational Distribution">
+                        <group>
+                            <field name="paused_subscriptions" readonly="1"/>
+                            <field name="draft_subscriptions" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="outstanding_invoices_count" readonly="1"/>
+                            <field name="overdue_invoices_count" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_subscription_dashboard" model="ir.actions.server">
+        <field name="name">Dashboard</field>
+        <field name="model_id" ref="model_subscription_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_dashboard()</field>
+    </record>
+</odoo>

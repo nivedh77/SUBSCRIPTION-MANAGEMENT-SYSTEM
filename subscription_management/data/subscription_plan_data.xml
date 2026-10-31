@@ -6,6 +6,8 @@
         <field name="code">PLAN-M-STD</field>
         <field name="billing_interval">monthly</field>
         <field name="billing_interval_count">1</field>
+        <field name="price">49.00</field>
+        <field name="min_quantity">1.0</field>
         <field name="trial_period_days">0</field>
         <field name="auto_renew">True</field>
         <field name="description"><![CDATA[<p>Standard monthly subscription billing cycle with automatic renewal.</p>]]></field>
@@ -17,6 +19,8 @@
         <field name="code">PLAN-Y-PRO</field>
         <field name="billing_interval">yearly</field>
         <field name="billing_interval_count">1</field>
+        <field name="price">490.00</field>
+        <field name="min_quantity">1.0</field>
         <field name="trial_period_days">0</field>
         <field name="auto_renew">True</field>
         <field name="description"><![CDATA[<p>Annual subscription billing cycle with automatic renewal and discounted rate.</p>]]></field>
@@ -28,6 +32,8 @@
         <field name="code">PLAN-W-TRL</field>
         <field name="billing_interval">weekly</field>
         <field name="billing_interval_count">1</field>
+        <field name="price">15.00</field>
+        <field name="min_quantity">1.0</field>
         <field name="trial_period_days">7</field>
         <field name="auto_renew">True</field>
         <field name="description"><![CDATA[<p>Weekly recurring subscription featuring a 7-day introductory trial period.</p>]]></field>

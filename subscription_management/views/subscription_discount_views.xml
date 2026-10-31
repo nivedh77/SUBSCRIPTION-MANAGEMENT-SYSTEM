@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Subscription Discount List View -->
+    <record id="view_subscription_discount_list" model="ir.ui.view">
+        <field name="name">subscription.discount.list</field>
+        <field name="model">subscription.discount</field>
+        <field name="arch" type="xml">
+            <list string="Discounts &amp; Promotions">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="discount_type"/>
+                <field name="discount_value"/>
+                <field name="min_purchase_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Subscription Discount Form View -->
+    <record id="view_subscription_discount_form" model="ir.ui.view">
+        <field name="name">subscription.discount.form</field>
+        <field name="model">subscription.discount</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Discount">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" string="Discount Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Summer Promo 20%"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="rule_details" string="Discount Rule">
+                            <field name="code" placeholder="e.g. SUMMER20"/>
+                            <field name="discount_type"/>
+                            <label for="discount_value" string="Value"/>
+                            <div class="o_row">
+                                <field name="discount_value"/>
+                                <span invisible="discount_type != 'percentage'">%</span>
+                                <span invisible="discount_type != 'fixed'"><field name="currency_id" readonly="1" options="{'no_open': True}"/></span>
+                            </div>
+                            <field name="min_purchase_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group name="validity_details" string="Validity Period &amp; Scope">
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="active" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="terms" string="Terms &amp; Conditions">
+                            <field name="description" placeholder="Specify applicability criteria or promotion terms..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Subscription Discount Search View -->
+    <record id="view_subscription_discount_search" model="ir.ui.view">
+        <field name="name">subscription.discount.search</field>
+        <field name="model">subscription.discount</field>
+        <field name="arch" type="xml">
+            <search string="Search Discounts">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'discount_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_subscription_discount" model="ir.actions.act_window">
+        <field name="name">Discounts &amp; Coupons</field>
+        <field name="res_model">subscription.discount</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subscription_discount_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create promotional coupons and subscription discounts!
+            </p>
+            <p>
+                Configure percentage or fixed amount discounts with eligibility dates and minimum spending thresholds.
+            </p>
+        </field>
+    </record>
+</odoo>

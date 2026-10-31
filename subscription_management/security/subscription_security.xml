@@ -20,7 +20,7 @@
         <field name="name">Administrator</field>
         <field name="category_id" ref="module_category_subscription"/>
         <field name="implied_ids" eval="[(4, ref('group_subscription_user'))]"/>
-        <field name="comment">Full administrative access to subscription plans, contracts, billing settings, and revenue analytics.</field>
+        <field name="comment">Full administrative access to subscription plans, contracts, billing settings, discounts, and revenue analytics.</field>
     </record>
 
     <!-- Multi-Company Rules -->
@@ -36,7 +36,13 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
-    <!-- Portal User Rule -->
+    <record id="subscription_discount_comp_rule" model="ir.rule">
+        <field name="name">Subscription Discount Multi-Company</field>
+        <field name="model_id" ref="model_subscription_discount"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Portal User Rule: Strict customer isolation -->
     <record id="subscription_subscription_portal_rule" model="ir.rule">
         <field name="name">Portal Subscriptions</field>
         <field name="model_id" ref="model_subscription_subscription"/>

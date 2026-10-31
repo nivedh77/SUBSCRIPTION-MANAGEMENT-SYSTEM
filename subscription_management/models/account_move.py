@@ -14,3 +14,8 @@ class AccountMove(models.Model):
         index=True,
         help='The subscription order that generated this recurring invoice.'
     )
+    subscription_billing_date = fields.Date(
+        string='Subscription Billing Period',
+        copy=False,
+        help='Target billing date for the subscription recurring period.'
+    )

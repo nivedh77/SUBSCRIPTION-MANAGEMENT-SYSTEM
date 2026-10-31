@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Promotional 10% Discount -->
+    <record id="discount_promo_10" model="subscription.discount">
+        <field name="name">10% Seasonal Promotion</field>
+        <field name="code">PROMO10</field>
+        <field name="discount_type">percentage</field>
+        <field name="discount_value">10.0</field>
+        <field name="min_purchase_amount">0.0</field>
+        <field name="description">10% promotional discount applied across all recurring subscription plans.</field>
+    </record>
+
+    <!-- Welcome $25 Fixed Discount -->
+    <record id="discount_welcome_25" model="subscription.discount">
+        <field name="name">Welcome $25 Voucher</field>
+        <field name="code">WELCOME25</field>
+        <field name="discount_type">fixed</field>
+        <field name="discount_value">25.0</field>
+        <field name="min_purchase_amount">50.0</field>
+        <field name="description">Fixed $25 discount applicable to subscriptions with min subtotal of $50.</field>
+    </record>
+</odoo>
