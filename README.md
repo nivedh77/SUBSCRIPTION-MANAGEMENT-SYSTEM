@@ -1,6 +1,6 @@
 # 🔄 Subscription Management System for Odoo 19 Community
 
-> Built for the **Odoo Makeathon / Hackathon 2026** by Team STRANGERS [Nivedh M](https://github.com/nivedh77) and RASHMI KRISHNA P (https://github.com/rashmikrishnap)
+> Built for the **Odoo Makeathon / Hackathon 2026** by Team STRANGERS [Nivedh M](https://github.com/nivedh77) and [RASHMI KRISHNA P](https://github.com/rashmikrishnap)
 
 A robust, enterprise-ready Subscription Management module designed natively for **Odoo 19 Community Edition**. It provides automated recurring billing, contract lifecycle management, flexible pricing plans, and customer self-service capabilities.
 
